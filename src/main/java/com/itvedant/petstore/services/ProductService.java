@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.stereotype.Service;
 
@@ -12,25 +13,15 @@ import com.itvedant.petstore.entities.Product;
 //Service will work same as that of @Component annotation
 @Service
 public class ProductService {
-
-    Map<Integer, Product> products = new HashMap<>();
     
-    public String addProduct() {
-        Product p1 = new Product();
-        p1.setId(10);
-        p1.setName("dog shoes - red");
-        p1.setPrice(670.00);
-        p1.setDescription("beautiful red shoes for pet dogs");
-        products.put(p1.getId(), p1);
+    Map<Integer, Product> products = new HashMap<>();
 
-        Product p2 = new Product();
-        p2.setId(20);
-        p2.setName("dog shoes - green");
-        p2.setPrice(670.00);
-        p2.setDescription("beautiful green shoes for pet dogs");
-        products.put(p2.getId(), p2);
+    AtomicInteger atomic = new AtomicInteger();
 
-        return "Product Added";
+    public Product addProduct(Product newProduct) {
+        newProduct.setId(atomic.incrementAndGet());
+        products.put(newProduct.getId(), newProduct);
+        return products.get(newProduct.getId());
     }
     
     public List<Product> getAll() {
@@ -40,5 +31,15 @@ public class ProductService {
     public String deleteProduct(Integer id){
         products.remove(id);
         return "Product Deleted";
+    }
+
+    public Product getProduct(Integer id){
+        return products.get(id);
+    }
+
+    public Product updateProduct(Integer id, Product prod){
+        prod.setId(id);
+        products.put(id, prod);
+        return products.get(id);
     }
 }
