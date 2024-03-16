@@ -1,6 +1,6 @@
 package com.itvedant.petstore.controllers;
 
-import org.springframework.web.bind.annotation.RestController;
+//import org.springframework.web.bind.annotation.RestController;
 
 import com.itvedant.petstore.entities.Product;
 import com.itvedant.petstore.services.ProductService;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
-@RestController
+//@RestController
 public class ProductController {
 
     @Autowired

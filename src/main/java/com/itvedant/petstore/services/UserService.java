@@ -1,48 +1,50 @@
 package com.itvedant.petstore.services;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+//import java.util.ArrayList;
+//import java.util.HashMap;
+//import java.util.List;
+//import java.util.Map;
+//import java.util.concurrent.atomic.AtomicInteger;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itvedant.petstore.entities.User;
+import com.itvedant.petstore.repositories.UserRepository;
 
 @Service
 public class UserService {
-    private Map<Integer, User> users = new HashMap<>();
+    //private Map<Integer, User> users = new HashMap<>();
 
-    private AtomicInteger atomic = new AtomicInteger(0);
+    //private AtomicInteger atomic = new AtomicInteger(0);
 
+    @Autowired
+    private UserRepository userRepository;
+    
     //Create
     public User addUser(User newUser){
-        newUser.setId(atomic.incrementAndGet());
-        users.put(newUser.getId(), newUser);
-        return newUser;
+        return this.userRepository.save(newUser);
     }
 
     //Read - All
-    public List<User> getAll(){
-        return new ArrayList<User>(users.values());
+    public Iterable<User> getAll(){
+        return this.userRepository.findAll();
     }
 
     //Read - One
     public User getUser(Integer id){
-        return users.get(id);
+        return this.userRepository.findById(id).orElse(null);
     }
 
     //Delete
     public String deleteUser(Integer id){
-        users.remove(id);
+        this.userRepository.deleteById(id);
         return "User Deleted";
     }
 
     //update
-    public User updateUser(Integer id, User updatedUser){
-        updatedUser.setId(id);
-        users.put(id, updatedUser);
-        return updatedUser;
+    public User updateUser(Integer id, User updateUser){
+        updateUser.setId(id);
+        return this.userRepository.save(updateUser);
     }
 }
